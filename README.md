@@ -10,6 +10,7 @@ The following is a small example of how to create an AMI of a machine with role[
 require 'capistrano-ec2ami'
 
 create_ami({
+  role: :web
   name: 'ami-name-here',
   description: 'ami-description-here',
   no_reboot: true
