@@ -18,6 +18,10 @@ module Capistrano
 
           _cset(:aws_secret_access_key, ENV['AWS_SECRET_ACCESS_KEY'])
           _cset(:aws_access_key_id, ENV['AWS_ACCESS_KEY_ID'])
+          _cset(:ec2ami_role, :web)
+          _cset(:ec2ami_name, "capistrano-ec2ami-#{Time.now.to_i}")
+          _cset(:ec2ami_description, "AMI created by capistrano-ec2ami (#{Time.now})")
+          _cset(:ec2ami_no_reboot, true)
 
           ######################################################################
           # def ec2
@@ -60,20 +64,26 @@ module Capistrano
           #
           # Returns: String
           ######################################################################
-          def create_ami(options={})
+          def create_ami
             logger.info "\e[1;44m ## Creating AMI!\e[0m"
-            instance = find_instance_id(roles[options[:role]].servers.sample.host).id
+            instance = find_instance_id(roles[fetch(:ec2ami_role)].servers.sample.host).id
 
             ami_id = ec2.create_image(
               instance,
-              options[:name] || "capistrano-ec2ami-#{Time.now.to_i}",
-              options[:description] || "AMI of instance #{instance} created by capistrano-ec2ami (#{Time.now})",
-                options[:no_reboot] || true
+              fetch(:ec2ami_name),
+              fetch(:ec2ami_description),
+              fetch(:ec2ami_no_reboot)
             )
 
             logger.info "\e[1;44m Successfully created AMI: #{ami_id.body['imageId']}\e[0m"
           end
 
+          namespace :ami do
+            desc 'Creates an Amaazon EC2 AMI'
+            task :create, once: true, roles: (fetch(:ec2ami_role) || :web) do
+              create_ami
+            end
+          end
 
         end
       end

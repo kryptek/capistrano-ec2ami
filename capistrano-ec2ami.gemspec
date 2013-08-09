@@ -5,12 +5,12 @@ require 'capistrano-ec2ami'
 
 Gem::Specification.new do |gem|
   gem.name          = "capistrano-ec2ami"
-  gem.version       = '1.0.0'
+  gem.version       = '1.0.2'
   gem.authors       = ["Alfred Moreno"]
   gem.email         = ["alfred.moreno@zumba.com"]
   gem.description   = %q{A capistrano plugin for creating EC2 AMIs}
   gem.summary       = %q{A capistrano plugin for creating EC2 AMIs}
-  gem.homepage      = ""
+  gem.homepage      = "http://github.com/kryptek"
 
   gem.files         = `git ls-files`.split($/)
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }

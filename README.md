@@ -4,19 +4,23 @@ Create AMI's from your EC2 instances with your capistrano scripts.
 
 ## Usage
 
-The following is a small example of how to create an AMI of a machine with role[:web]:
+To get started, set the following variables in your capistrano settings
+file:
 
 ```
-require 'capistrano-ec2ami'
+set :ec2ami_role, :web
+set :ec2ami_name, 'Awesome-AMI'
+set :ec2ami_description, 'Awesome-description'
+set :ec2ami_no_reboot, true
+```
 
-create_ami({
-  role: :web
-  name: 'ami-name-here',
-  description: 'ami-description-here',
-  no_reboot: true
-})
+Then, issue the following callback to create an AMI of your EC2 instance
+after a deployment
 
 ```
+after 'deploy', 'ami:create'
+```
+
 
 ## Requirements
 You are expected to have ENV variables for your AWS credentials
